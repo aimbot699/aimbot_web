@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;400;700&family=Azeret+Mono:wght@200;400&display=swap" rel="stylesheet">
+    <title>Aimbot's Web</title>
+    <meta name="description" content="Discord Bot Developer & Minecraft Server Dev. View projects, contact info, and current music rotation." />
+    <meta name="author" content="Aimbot" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="icon" href="/favicon.jpeg" type="image/jpeg" />
+
+    <meta property="og:title" content="Aimbot's Web" />
+    <meta property="og:description" content="Full stack developer specializing in modern web technologies." />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script>
+      // Dynamically fetch Discord PFP for Favicon
+      const DISCORD_ID = '1210706335268864013';
+      fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
+        .then(response => response.json())
+        .then(result => {
+          if (result.success && result.data.discord_user.avatar) {
+            const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${result.data.discord_user.avatar}.png?size=32`;
+            const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            link.type = 'image/png';
+            link.rel = 'icon';
+            link.href = avatarUrl;
+            document.getElementsByTagName('head')[0].appendChild(link);
+          }
+        });
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
