@@ -15,7 +15,7 @@ interface MusicPlayerProps {
 
 const MusicPlayer = ({ tracks }: MusicPlayerProps) => {
   const [currentTrack, setCurrentTrack] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(50);
