@@ -1,25 +1,36 @@
-# Build stage
-FROM node:20-slim AS builder
+# Use the official Bun image
+FROM oven/bun:latest as base
+WORKDIR /usr/src/app
 
-WORKDIR /app
+# Install dependencies
+FROM base AS install
+RUN mkdir -p /temp/dev
+COPY package.json bun.lockb /temp/dev/
+RUN cd /temp/dev && bun install --frozen-lockfile
 
-COPY package*.json ./
-RUN npm install
+# Install production dependencies
+RUN mkdir -p /temp/prod
+COPY package.json bun.lockb /temp/prod/
+RUN cd /temp/prod && bun install --frozen-lockfile --production
 
+# Build the application
+FROM base AS build
+COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
-RUN npm run build
+RUN bun run build
 
-# Production stage
-FROM node:20-slim
+# Run the application
+FROM base AS release
+COPY --from=install /temp/prod/node_modules node_modules
+COPY --from=build /usr/src/app/dist dist
+COPY --from=build /usr/src/app/server.js .
+COPY --from=build /usr/src/app/package.json .
 
-WORKDIR /app
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=8080
 
-COPY package*.json ./
-RUN npm install --omit=dev && npm install express@4.18.2
+EXPOSE 8080
 
-COPY --from=builder /app/dist ./dist
-COPY server.js ./
-
-EXPOSE 3000
-
-CMD ["node", "server.js"]
+# Run the server
+CMD ["bun", "run", "server.js"]
