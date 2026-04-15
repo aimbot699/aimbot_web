@@ -61,9 +61,6 @@ const ProfileCard = () => {
 
                 {/* Discord Status */}
                 <DiscordStatus userId={DISCORD_USER_ID} />
-
-                {/* Music Player */}
-                <MusicPlayer tracks={tracks} />
               </motion.div>
             )}
 
@@ -91,6 +88,9 @@ const ProfileCard = () => {
               </motion.div>
             )}
           </AnimatePresence>
+          
+          {/* Persistent Music Player */}
+          <MusicPlayer tracks={tracks} />
           
           {/* Footer Credit */}
           <div className="mt-8 pt-4 border-t border-border/30 text-center">
